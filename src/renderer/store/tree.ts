@@ -1,4 +1,7 @@
-import { TreeDataType } from '@arco-design/web-react/es/Tree/interface';
+import {
+  NodeInstance,
+  TreeDataType,
+} from '@arco-design/web-react/es/Tree/interface';
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 
@@ -15,6 +18,11 @@ interface TreeStoreState {
   setTreeData: (treeData: TreeNode[]) => void;
   addTreeNode: (treeNode: TreeNode) => void;
   addTreeNodeChildren: (parentKey: string, treeNode: TreeNode) => void;
+  moveTreeNode: (
+    dragNode: NodeInstance | null,
+    dropNode: NodeInstance | null,
+    dropPosition: number
+  ) => void;
 }
 
 export const useTreeStore = create<TreeStoreState>()(
@@ -44,6 +52,62 @@ export const useTreeStore = create<TreeStoreState>()(
           targetTreeNode.children = [];
         }
         targetTreeNode.children.push(treeNode);
+      });
+    },
+    moveTreeNode: (
+      dragNode: NodeInstance | null,
+      dropNode: NodeInstance | null,
+      dropPosition: number
+    ) => {
+      set((state) => {
+        if (!dragNode) {
+          return;
+        }
+
+        if (!dropNode) {
+          return;
+        }
+
+        const loop = (
+          data: TreeDataType[],
+          key: string,
+          callback: (
+            item: TreeDataType,
+            index: number,
+            arr: TreeDataType[]
+          ) => void
+        ) => {
+          data.some((item, index, arr) => {
+            if (item.key === key) {
+              callback(item, index, arr);
+              return true;
+            }
+
+            if (item.children) {
+              return loop(item.children, key, callback);
+            }
+          });
+        };
+
+        const data = [...state.treeData];
+        let dragItem: TreeDataType;
+        loop(data, dragNode.props._key ?? '', (item, index, arr) => {
+          arr.splice(index, 1);
+          dragItem = item;
+        });
+
+        if (dropPosition === 0) {
+          loop(data, dropNode.props._key ?? '', (item, index, arr) => {
+            item.children = item.children || [];
+            item.children.push(dragItem);
+          });
+        } else {
+          loop(data, dropNode.props._key ?? '', (item, index, arr) => {
+            arr.splice(dropPosition < 0 ? index : index + 1, 0, dragItem);
+          });
+        }
+
+        state.treeData = [...data];
       });
     },
   }))

@@ -7,7 +7,7 @@ function Main() {
   return (
     <div style={{ height: '100vh', width: '100vw' }}>
       <Allotment>
-        <Allotment.Pane preferredSize={240} minSize={240}>
+        <Allotment.Pane preferredSize={270} minSize={240}>
           <SideTree />
         </Allotment.Pane>
 
