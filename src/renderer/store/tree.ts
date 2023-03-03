@@ -5,19 +5,20 @@ import {
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 
-export type TreeNode = Pick<TreeDataType, 'title'> & {
+export type WebsiteTreeNode = Pick<TreeDataType, 'title'> & {
   key: string;
-  children?: TreeNode[];
+  children?: WebsiteTreeNode[];
   url: string;
   isLeaf?: boolean;
 };
 
 interface TreeStoreState {
-  treeData: TreeNode[];
-  selectedNode: TreeNode | null;
-  setTreeData: (treeData: TreeNode[]) => void;
-  addTreeNode: (treeNode: TreeNode) => void;
-  addTreeNodeChildren: (parentKey: string, treeNode: TreeNode) => void;
+  treeData: WebsiteTreeNode[];
+  selectedNode: WebsiteTreeNode | null;
+  setSelectedNode: (selectedNode: WebsiteTreeNode) => void;
+  setTreeData: (treeData: WebsiteTreeNode[]) => void;
+  addTreeNode: (treeNode: WebsiteTreeNode) => void;
+  addTreeNodeChildren: (parentKey: string, treeNode: WebsiteTreeNode) => void;
   moveTreeNode: (
     dragNode: NodeInstance | null,
     dropNode: NodeInstance | null,
@@ -25,21 +26,44 @@ interface TreeStoreState {
   ) => void;
 }
 
+const defaultTreeData = [
+  {
+    key: 'baidu',
+    title: 'Baidu',
+    url: 'https://baidu.com',
+    children: [],
+    isLeaf: false,
+  },
+  {
+    key: 'bing',
+    title: 'Bing',
+    url: 'https://cn.bing.com/',
+    children: [],
+    isLeaf: false,
+  },
+];
+
 export const useTreeStore = create<TreeStoreState>()(
   immer((set) => ({
-    treeData: [],
+    treeData: defaultTreeData,
     selectedNode: null,
-    setTreeData: (treeData: TreeNode[]) => {
+    setSelectedNode: (selectedNode: WebsiteTreeNode) => {
+      set({
+        selectedNode,
+      });
+    },
+
+    setTreeData: (treeData: WebsiteTreeNode[]) => {
       set({
         treeData,
       });
     },
-    addTreeNode: (treeNode: TreeNode) => {
+    addTreeNode: (treeNode: WebsiteTreeNode) => {
       set((state) => {
         state.treeData.push(treeNode);
       });
     },
-    addTreeNodeChildren: (parentKey: string, treeNode: TreeNode) => {
+    addTreeNodeChildren: (parentKey: string, treeNode: WebsiteTreeNode) => {
       set((state) => {
         const treeData = state.treeData;
 
@@ -113,7 +137,10 @@ export const useTreeStore = create<TreeStoreState>()(
   }))
 );
 
-function findTreeNode(treeData: TreeNode[], key: string): TreeNode | null {
+function findTreeNode(
+  treeData: WebsiteTreeNode[],
+  key: string
+): WebsiteTreeNode | null {
   const targetNode = treeData.find((node) => {
     return node.key === key;
   });
@@ -134,7 +161,7 @@ function findTreeNode(treeData: TreeNode[], key: string): TreeNode | null {
   return null;
 }
 
-export function generateFakeNode(): TreeNode {
+export function generateFakeNode(): WebsiteTreeNode {
   const key = 'fooo' + Math.random();
   return {
     key,

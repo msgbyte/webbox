@@ -1,7 +1,7 @@
 import { Tree } from '@arco-design/web-react';
 import { IconDown, IconPlus } from '@arco-design/web-react/icon';
 import React from 'react';
-import { generateFakeNode, useTreeStore } from '../store/tree';
+import { generateFakeNode, WebsiteTreeNode, useTreeStore } from '../store/tree';
 import { AddWebsiteBtn } from './AddWebsiteBtn';
 import styled from 'styled-components';
 
@@ -12,7 +12,8 @@ const StyledTree = styled(Tree)`
 ` as unknown as typeof Tree;
 
 export const SideTree: React.FC = React.memo(() => {
-  const { treeData, moveTreeNode, addTreeNodeChildren } = useTreeStore();
+  const { treeData, moveTreeNode, setSelectedNode, addTreeNodeChildren } =
+    useTreeStore();
 
   return (
     <div>
@@ -24,6 +25,12 @@ export const SideTree: React.FC = React.memo(() => {
         treeData={treeData}
         icons={{
           switcherIcon: <IconDown />,
+        }}
+        onSelect={(_, extra) => {
+          const nodeData = extra.node.props.dataRef;
+          if (nodeData) {
+            setSelectedNode(nodeData as WebsiteTreeNode);
+          }
         }}
         renderExtra={(node) => {
           return (
