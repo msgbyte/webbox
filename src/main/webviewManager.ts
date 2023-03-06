@@ -41,14 +41,10 @@ export function initWebviewManager(win: BrowserWindow) {
   });
 
   ipcMain.on('update-webview-rect', (e, info) => {
-    const key = info.key;
-    if (!webviewMap.has(key)) {
-      return;
-    }
-
     console.log('[update-webview-rect] info:', info);
 
-    const view = webviewMap.get(key)!;
-    view.setBounds(fixRect(info.rect));
+    Array.from(webviewMap.values()).forEach((view) => {
+      view.setBounds(fixRect(info.rect));
+    });
   });
 }

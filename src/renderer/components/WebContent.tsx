@@ -40,7 +40,6 @@ const WebviewRender: React.FC<{ node: WebsiteTreeNode }> = React.memo(
           const rect = target.getBoundingClientRect();
 
           window.electron.ipcRenderer.sendMessage('update-webview-rect', {
-            key: node.key,
             rect: {
               x: rect.x,
               y: rect.y,
