@@ -16,7 +16,7 @@ export type WebsiteTreeNode = Pick<TreeDataType, 'title'> & {
 interface TreeStoreState {
   treeData: WebsiteTreeNode[];
   selectedNode: WebsiteTreeNode | null;
-  setSelectedNode: (selectedNode: WebsiteTreeNode) => void;
+  setSelectedNode: (selectedNode: WebsiteTreeNode | null) => void;
   setTreeData: (treeData: WebsiteTreeNode[]) => void;
   addTreeNode: (treeNode: WebsiteTreeNode) => void;
   addTreeNodeChildren: (parentKey: string, treeNode: WebsiteTreeNode) => void;
@@ -25,6 +25,7 @@ interface TreeStoreState {
     dropNode: NodeInstance | null,
     dropPosition: number
   ) => void;
+  deleteTreeNode: (key: string) => void;
 }
 
 const defaultTreeData = [
@@ -49,7 +50,7 @@ export const useTreeStore = create<TreeStoreState>()(
     immer((set) => ({
       treeData: defaultTreeData,
       selectedNode: null,
-      setSelectedNode: (selectedNode: WebsiteTreeNode) => {
+      setSelectedNode: (selectedNode: WebsiteTreeNode | null) => {
         set({
           selectedNode,
         });
@@ -136,6 +137,11 @@ export const useTreeStore = create<TreeStoreState>()(
           state.treeData = [...data];
         });
       },
+      deleteTreeNode: (key: string) => {
+        set((state) => {
+          deleteTreeNode(state.treeData, key);
+        });
+      },
     })),
     {
       name: 'webbox-tree',
@@ -148,15 +154,11 @@ function findTreeNode(
   treeData: WebsiteTreeNode[],
   key: string
 ): WebsiteTreeNode | null {
-  const targetNode = treeData.find((node) => {
-    return node.key === key;
-  });
-
-  if (targetNode) {
-    return targetNode;
-  }
-
   for (const node of treeData) {
+    if (node.key === key) {
+      return node;
+    }
+
     if (node.children && node.children.length > 0) {
       const res = findTreeNode(node.children, key);
       if (res) {
@@ -166,6 +168,28 @@ function findTreeNode(
   }
 
   return null;
+}
+
+/**
+ * in-place algorithm
+ */
+function deleteTreeNode(treeData: WebsiteTreeNode[], key: string): boolean {
+  for (let i = 0; i < treeData.length; i++) {
+    const node = treeData[i];
+    if (node.key === key) {
+      treeData.splice(i, 1);
+      return true;
+    }
+
+    if (node.children && node.children.length > 0) {
+      const fixed = deleteTreeNode(node.children, key);
+      if (fixed) {
+        return true;
+      }
+    }
+  }
+
+  return false;
 }
 
 export function generateFakeNode(): WebsiteTreeNode {

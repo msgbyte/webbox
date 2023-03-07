@@ -7,9 +7,9 @@ const webviewMap = new Map<string, BrowserView>();
  */
 function fixRect(rect: Rectangle): Rectangle {
   return {
-    x: Math.round(rect.x),
+    x: Math.round(rect.x) + 1,
     y: Math.round(rect.y) + 28,
-    width: Math.round(rect.width),
+    width: Math.round(rect.width) - 1,
     height: Math.round(rect.height),
   };
 }
@@ -46,5 +46,15 @@ export function initWebviewManager(win: BrowserWindow) {
     Array.from(webviewMap.values()).forEach((view) => {
       view.setBounds(fixRect(info.rect));
     });
+  });
+
+  ipcMain.on('clear-webview', (e) => {
+    console.log('[clear-webview]');
+
+    win.getBrowserViews().forEach((view) => {
+      win.removeBrowserView(view);
+    });
+
+    webviewMap.clear();
   });
 }

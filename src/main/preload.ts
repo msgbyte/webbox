@@ -2,7 +2,10 @@
 /* eslint no-unused-vars: off */
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 
-export type Channels = 'mount-webview' | 'update-webview-rect';
+export type Channels =
+  | 'mount-webview'
+  | 'update-webview-rect'
+  | 'clear-webview';
 
 const electronHandler = {
   ipcRenderer: {
