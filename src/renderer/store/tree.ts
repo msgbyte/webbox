@@ -139,6 +139,10 @@ export const useTreeStore = create<TreeStoreState>()(
       },
       deleteTreeNode: (key: string) => {
         set((state) => {
+          if (state.selectedNode && state.selectedNode.key === key) {
+            state.selectedNode = null;
+          }
+
           deleteTreeNode(state.treeData, key);
         });
       },

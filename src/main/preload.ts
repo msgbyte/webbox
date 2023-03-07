@@ -5,7 +5,8 @@ import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 export type Channels =
   | 'mount-webview'
   | 'update-webview-rect'
-  | 'clear-webview';
+  | 'hide-all-webview'
+  | 'clear-all-webview';
 
 const electronHandler = {
   ipcRenderer: {

@@ -11,7 +11,7 @@ export const ClearWebsiteBtn: React.FC = React.memo(() => {
         long={true}
         onClick={() => {
           setSelectedNode(null);
-          window.electron.ipcRenderer.sendMessage('clear-webview');
+          window.electron.ipcRenderer.sendMessage('clear-all-webview');
         }}
       >
         Clear Website

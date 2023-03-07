@@ -5,6 +5,7 @@ import { generateFakeNode, WebsiteTreeNode, useTreeStore } from '../store/tree';
 import { AddWebsiteBtn } from './AddWebsiteBtn';
 import styled from 'styled-components';
 import { ClearWebsiteBtn } from './ClearWebsiteBtn';
+import { stopPropagation } from '../utils/dom';
 
 const StyledTree = styled(Tree)`
   margin-top: 0.5rem;
@@ -64,7 +65,8 @@ export const SideTree: React.FC = React.memo(() => {
               <StyledMenu>
                 <Menu.Item
                   key="del"
-                  onClick={() => {
+                  onClick={(e) => {
+                    stopPropagation(e);
                     if (props.dataRef && props.dataRef.key) {
                       deleteTreeNode(props.dataRef.key);
                     }
