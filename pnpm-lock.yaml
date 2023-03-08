@@ -65,6 +65,7 @@ specifiers:
   rimraf: ^4.1.2
   sass: ^1.58.0
   sass-loader: ^13.2.0
+  source-map-support: ^0.5.21
   style-loader: ^3.3.1
   styled-components: ^5.3.6
   terser-webpack-plugin: ^5.3.6
@@ -93,6 +94,7 @@ dependencies:
   react-dom: 18.2.0_react@18.2.0
   react-is: 18.2.0
   react-router-dom: 6.8.1_biqbaboplfbrettd7655fr4n2y
+  source-map-support: 0.5.21
   styled-components: 5.3.6_7i5myeigehqah43i5u7wbekgba
   zustand: 4.3.2_immer@9.0.19+react@18.2.0
 
@@ -3683,7 +3685,6 @@ packages:
 
   /buffer-from/1.1.2:
     resolution: {integrity: sha512-E+XQCRwSbaaiChtv6k6Dwgc+bx+Bs6vuKJHHl5kox/BaKbhiXzqQOwK4cO22yElGp2OCmjwVhT3HmxgyPGnJfQ==}
-    dev: true
 
   /buffer/5.7.1:
     resolution: {integrity: sha512-EHcyIPBQ4BSGlvjB16k5KgAJ27CIsHY/2JBmCRReo48y9rQ3MaUzWX3KVlBa4U7MyX02HdVj0K7C3WaB3ju7FQ==}
@@ -9736,12 +9737,10 @@ packages:
     dependencies:
       buffer-from: 1.1.2
       source-map: 0.6.1
-    dev: true
 
   /source-map/0.6.1:
     resolution: {integrity: sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==}
     engines: {node: '>=0.10.0'}
-    dev: true
 
   /source-map/0.7.4:
     resolution: {integrity: sha512-l3BikUxvPOcn5E74dZiq5BGsTb5yEwhaTSzccU6t4sDOH8NWJCstKO5QT2CvtFoK6F0saL7p9xHAqHOlCPJygA==}
