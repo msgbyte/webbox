@@ -11,10 +11,10 @@ const webviewMap = new Map<string, WebviewInfo>();
 /**
  * fix rect into correct size
  */
-function fixRect(rect: Rectangle): Rectangle {
+function fixRect(rect: Rectangle, isFullScreen: boolean): Rectangle {
   return {
     x: Math.round(rect.x) + 1,
-    y: Math.round(rect.y) + 28,
+    y: Math.round(rect.y) + (isFullScreen ? 0 : 28),
     width: Math.round(rect.width) - 1,
     height: Math.round(rect.height),
   };
@@ -38,7 +38,7 @@ export function initWebviewManager(win: BrowserWindow) {
     if (webviewMap.has(key)) {
       const webview = webviewMap.get(key)!;
       win.setTopBrowserView(webview.view);
-      webview.view.setBounds(fixRect(info.rect));
+      webview.view.setBounds(fixRect(info.rect, win.isFullScreen()));
       if (webview.url !== url) {
         // url has been change.
         webview.view.webContents.loadURL(url);
@@ -53,7 +53,7 @@ export function initWebviewManager(win: BrowserWindow) {
       },
     });
     win.addBrowserView(view);
-    view.setBounds(fixRect(info.rect));
+    view.setBounds(fixRect(info.rect, win.isFullScreen()));
     view.webContents.loadURL(url);
     webviewMap.set(key, { view, url, hidden: false });
   });
@@ -75,12 +75,17 @@ export function initWebviewManager(win: BrowserWindow) {
   });
 
   ipcMain.on('update-webview-rect', (e, info) => {
+    if (!win) {
+      console.log('[update-webview-rect]', 'cannot get mainWindow');
+      return;
+    }
+
     console.log('[update-webview-rect] info:', info);
 
     const webview = webviewMap.get(info.key);
     if (webview) {
       webview.hidden = false;
-      webview.view.setBounds(fixRect(info.rect));
+      webview.view.setBounds(fixRect(info.rect, win.isFullScreen()));
     }
   });
 
