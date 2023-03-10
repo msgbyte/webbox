@@ -6,16 +6,14 @@ export const AddWebsiteBtn: React.FC = React.memo(() => {
   const { addTreeNode } = useTreeStore();
 
   return (
-    <>
-      <Button
-        long={true}
-        onClick={() => {
-          addTreeNode(generateDefaultNode());
-        }}
-      >
-        Add Website
-      </Button>
-    </>
+    <Button
+      long={true}
+      onClick={() => {
+        addTreeNode(generateDefaultNode());
+      }}
+    >
+      Add Website
+    </Button>
   );
 });
 AddWebsiteBtn.displayName = 'AddWebsiteBtn';

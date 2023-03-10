@@ -1,4 +1,4 @@
-import { Menu, Tooltip, Tree, Trigger } from '@arco-design/web-react';
+import { Menu, Tree, Trigger } from '@arco-design/web-react';
 import { IconDown, IconPlus } from '@arco-design/web-react/icon';
 import React from 'react';
 import {
@@ -36,6 +36,10 @@ const StyledMenu = styled(Menu)`
   }
 ` as unknown as typeof Menu;
 
+const Row = styled.div`
+  display: flex;
+`;
+
 export const SideTree: React.FC = React.memo(() => {
   const {
     treeData,
@@ -48,8 +52,10 @@ export const SideTree: React.FC = React.memo(() => {
 
   return (
     <div>
-      <AddWebsiteBtn />
-      <ClearWebsiteBtn />
+      <Row>
+        <AddWebsiteBtn />
+        <ClearWebsiteBtn />
+      </Row>
 
       <StyledTree
         draggable={true}
