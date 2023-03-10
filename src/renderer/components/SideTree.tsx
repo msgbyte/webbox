@@ -1,6 +1,6 @@
 import { Menu, Tree, Trigger } from '@arco-design/web-react';
 import { IconDown, IconPlus } from '@arco-design/web-react/icon';
-import React from 'react';
+import React, { useState } from 'react';
 import {
   generateDefaultNode,
   WebsiteTreeNode,
@@ -49,6 +49,7 @@ export const SideTree: React.FC = React.memo(() => {
     addTreeNodeChildren,
     deleteTreeNode,
   } = useTreeStore();
+  const [expandedKeys, setExpandedKeys] = useState<string[]>([]);
 
   return (
     <div>
@@ -61,6 +62,10 @@ export const SideTree: React.FC = React.memo(() => {
         draggable={true}
         blockNode={true}
         selectedKeys={selectedNode ? [selectedNode.key] : []}
+        expandedKeys={expandedKeys}
+        onExpand={(expandedKeys) => {
+          setExpandedKeys(expandedKeys);
+        }}
         treeData={treeData}
         icons={{
           switcherIcon: <IconDown />,
@@ -112,7 +117,13 @@ export const SideTree: React.FC = React.memo(() => {
                   return;
                 }
 
-                addTreeNodeChildren(node._key!, generateDefaultNode());
+                const key = node.dataRef.key;
+                if (!key) {
+                  return;
+                }
+
+                setExpandedKeys([...expandedKeys, key]);
+                addTreeNodeChildren(key, generateDefaultNode());
               }}
             />
           );

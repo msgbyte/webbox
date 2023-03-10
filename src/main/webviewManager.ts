@@ -58,6 +58,22 @@ export function initWebviewManager(win: BrowserWindow) {
     webviewMap.set(key, { view, url, hidden: false });
   });
 
+  ipcMain.on('unmount-webview', (e, info) => {
+    if (!win) {
+      console.log('[unmount-webview]', 'cannot get mainWindow');
+      return;
+    }
+
+    console.log('[unmount-webview] info:', info);
+
+    const key = info.key;
+    const webview = webviewMap.get(key);
+    if (webview) {
+      win.removeBrowserView(webview.view);
+      webviewMap.delete(key);
+    }
+  });
+
   ipcMain.on('update-webview-rect', (e, info) => {
     console.log('[update-webview-rect] info:', info);
 

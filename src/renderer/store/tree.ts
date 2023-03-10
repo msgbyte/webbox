@@ -16,8 +16,8 @@ export type WebsiteTreeNode = {
 };
 
 interface TreeStoreState {
-  treeData: WebsiteTreeNode[];
   selectedNode: WebsiteTreeNode | null;
+  treeData: WebsiteTreeNode[];
   setSelectedNode: (selectedNode: WebsiteTreeNode | null) => void;
   setTreeData: (treeData: WebsiteTreeNode[]) => void;
   addTreeNode: (treeNode: WebsiteTreeNode) => void;
@@ -46,6 +46,13 @@ const defaultTreeData = [
     key: 'bing',
     title: 'Bing',
     url: 'https://cn.bing.com/',
+    children: [],
+    isLeaf: false,
+  },
+  {
+    key: 'webbox',
+    title: 'webbox',
+    url: 'https://github.com/msgbyte/webbox',
     children: [],
     isLeaf: false,
   },

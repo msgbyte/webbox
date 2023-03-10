@@ -4,6 +4,7 @@ import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 
 export type Channels =
   | 'mount-webview'
+  | 'unmount-webview'
   | 'update-webview-rect'
   | 'hide-all-webview'
   | 'clear-all-webview';
