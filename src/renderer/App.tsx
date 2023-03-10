@@ -1,7 +1,7 @@
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import { Allotment } from 'allotment';
 import { SideTree } from './components/SideTree';
-import { WebContent } from './components/WebContent';
+import { WebContent } from './components/main/WebContent';
 
 function Main() {
   return (

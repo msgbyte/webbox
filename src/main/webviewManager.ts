@@ -2,6 +2,7 @@ import { BrowserView, BrowserWindow, ipcMain, Rectangle } from 'electron';
 
 interface WebviewInfo {
   view: BrowserView;
+  url: string;
   hidden: boolean;
 }
 
@@ -21,6 +22,11 @@ function fixRect(rect: Rectangle): Rectangle {
 
 export function initWebviewManager(win: BrowserWindow) {
   ipcMain.on('mount-webview', (e, info) => {
+    if (!win) {
+      console.log('[mount-webview]', 'cannot get mainWindow');
+      return;
+    }
+
     console.log('[mount-webview] info:', info);
 
     const key = info.key;
@@ -33,6 +39,10 @@ export function initWebviewManager(win: BrowserWindow) {
       const webview = webviewMap.get(key)!;
       win.setTopBrowserView(webview.view);
       webview.view.setBounds(fixRect(info.rect));
+      if (webview.url !== url) {
+        // url has been change.
+        webview.view.webContents.loadURL(url);
+      }
       return;
     }
 
@@ -44,7 +54,7 @@ export function initWebviewManager(win: BrowserWindow) {
     win.addBrowserView(view);
     view.setBounds(fixRect(info.rect));
     view.webContents.loadURL(url);
-    webviewMap.set(key, { view, hidden: false });
+    webviewMap.set(key, { view, url, hidden: false });
   });
 
   ipcMain.on('update-webview-rect', (e, info) => {
@@ -64,6 +74,11 @@ export function initWebviewManager(win: BrowserWindow) {
   });
 
   ipcMain.on('clear-all-webview', (e) => {
+    if (!win) {
+      console.log('[clear-all-webview]', 'cannot get mainWindow');
+      return;
+    }
+
     console.log('[clear-all-webview]');
 
     win.getBrowserViews().forEach((view) => {

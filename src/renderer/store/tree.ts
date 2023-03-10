@@ -6,7 +6,8 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
-export type WebsiteTreeNode = Pick<TreeDataType, 'title'> & {
+export type WebsiteTreeNode = {
+  title: string;
   key: string;
   children?: WebsiteTreeNode[];
   url: string;
@@ -26,6 +27,10 @@ interface TreeStoreState {
     dropPosition: number
   ) => void;
   deleteTreeNode: (key: string) => void;
+  patchSelectedNode: <T extends Exclude<keyof WebsiteTreeNode, 'key'>>(
+    key: T,
+    value: WebsiteTreeNode[T]
+  ) => void;
 }
 
 const defaultTreeData = [
@@ -55,7 +60,6 @@ export const useTreeStore = create<TreeStoreState>()(
           selectedNode,
         });
       },
-
       setTreeData: (treeData: WebsiteTreeNode[]) => {
         set({
           treeData,
@@ -144,6 +148,26 @@ export const useTreeStore = create<TreeStoreState>()(
           }
 
           deleteTreeNode(state.treeData, key);
+        });
+      },
+      patchSelectedNode: (key, value) => {
+        set((state) => {
+          if (!state.selectedNode) {
+            return;
+          }
+
+          // Check is changed
+          if (state.selectedNode[key] === value) {
+            return;
+          }
+
+          const node = findTreeNode(state.treeData, state.selectedNode.key);
+          if (!node) {
+            return;
+          }
+
+          state.selectedNode[key] = value;
+          node[key] = value;
         });
       },
     })),
