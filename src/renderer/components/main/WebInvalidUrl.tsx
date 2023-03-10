@@ -2,9 +2,8 @@ import React from 'react';
 import { useEffect } from 'react';
 import styled from 'styled-components';
 import webpageSvg from '../../assets/web-page.svg';
-import { AddWebsiteBtn } from '../AddWebsiteBtn';
 
-const WebPlaceholderRoot = styled.div`
+const WebInvalidUrlRoot = styled.div`
   height: 100%;
   width: 100%;
   display: flex;
@@ -18,24 +17,18 @@ const WebPlaceholderRoot = styled.div`
   }
 `;
 
-export const WebPlaceholder: React.FC = React.memo(() => {
+export const WebInvalidUrl: React.FC = React.memo(() => {
   useEffect(() => {
     window.electron.ipcRenderer.sendMessage('hide-all-webview');
   }, []);
 
   return (
-    <WebPlaceholderRoot>
+    <WebInvalidUrlRoot>
       <div>
         <img src={webpageSvg} />
       </div>
-      <div>Please Select Any Page on Left Website Tree</div>
-      <div>
-        <small>OR</small>
-      </div>
-      <div>
-        <AddWebsiteBtn />
-      </div>
-    </WebPlaceholderRoot>
+      <div>Please input valid url to load Url</div>
+    </WebInvalidUrlRoot>
   );
 });
-WebPlaceholder.displayName = 'WebPlaceholder';
+WebInvalidUrl.displayName = 'WebInvalidUrl';

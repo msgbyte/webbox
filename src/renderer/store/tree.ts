@@ -5,6 +5,7 @@ import {
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
+import { nanoid } from 'nanoid';
 
 export type WebsiteTreeNode = {
   title: string;
@@ -220,12 +221,12 @@ function deleteTreeNode(treeData: WebsiteTreeNode[], key: string): boolean {
   return false;
 }
 
-export function generateFakeNode(): WebsiteTreeNode {
-  const key = 'fooo' + Math.random();
+export function generateDefaultNode(): WebsiteTreeNode {
+  const key = nanoid();
   return {
     key,
-    title: key,
-    url: 'https://baidu.com',
+    title: 'Untitled',
+    url: '',
     children: [],
     isLeaf: false,
   };

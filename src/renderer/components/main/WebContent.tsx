@@ -2,7 +2,9 @@ import { Input } from '@arco-design/web-react';
 import React from 'react';
 import styled from 'styled-components';
 import { useTreeStore } from '../../store/tree';
+import { isValidUrl } from '../../utils';
 import { useEditValue } from '../../utils/hooks/useEditValue';
+import { WebInvalidUrl } from './WebInvalidUrl';
 import { WebPlaceholder } from './WebPlaceholder';
 import { WebviewRender } from './WebviewRender';
 
@@ -56,7 +58,11 @@ export const WebContent: React.FC = React.memo(() => {
         />
       </div>
       <div className="main">
-        <WebviewRender node={selectedNode} />
+        {isValidUrl(selectedNode.url) ? (
+          <WebviewRender node={selectedNode} />
+        ) : (
+          <WebInvalidUrl />
+        )}
       </div>
     </Root>
   );

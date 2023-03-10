@@ -1,7 +1,11 @@
 import { Menu, Tooltip, Tree, Trigger } from '@arco-design/web-react';
 import { IconDown, IconPlus } from '@arco-design/web-react/icon';
 import React from 'react';
-import { generateFakeNode, WebsiteTreeNode, useTreeStore } from '../store/tree';
+import {
+  generateDefaultNode,
+  WebsiteTreeNode,
+  useTreeStore,
+} from '../store/tree';
 import { AddWebsiteBtn } from './AddWebsiteBtn';
 import styled from 'styled-components';
 import { ClearWebsiteBtn } from './ClearWebsiteBtn';
@@ -102,7 +106,7 @@ export const SideTree: React.FC = React.memo(() => {
                   return;
                 }
 
-                addTreeNodeChildren(node._key!, generateFakeNode());
+                addTreeNodeChildren(node._key!, generateDefaultNode());
               }}
             />
           );

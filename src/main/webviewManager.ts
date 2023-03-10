@@ -46,6 +46,7 @@ export function initWebviewManager(win: BrowserWindow) {
       return;
     }
 
+    hideAllWebview();
     const view = new BrowserView({
       webPreferences: {
         nodeIntegration: false,
@@ -60,17 +61,17 @@ export function initWebviewManager(win: BrowserWindow) {
   ipcMain.on('update-webview-rect', (e, info) => {
     console.log('[update-webview-rect] info:', info);
 
-    Array.from(webviewMap.values()).forEach(({ view }) => {
-      view.setBounds(fixRect(info.rect));
-    });
+    const webview = webviewMap.get(info.key);
+    if (webview) {
+      webview.hidden = false;
+      webview.view.setBounds(fixRect(info.rect));
+    }
   });
 
   ipcMain.on('hide-all-webview', (e) => {
     console.log('[hide-all-webview]');
 
-    Array.from(webviewMap.values()).forEach((webview) => {
-      hideWebView(webview);
-    });
+    hideAllWebview();
   });
 
   ipcMain.on('clear-all-webview', (e) => {
@@ -120,5 +121,11 @@ function hideWebView(webview: WebviewInfo) {
   webview.view.setBounds({
     ...oldBounds,
     y: oldBounds.y + HIDDEN_OFFSET,
+  });
+}
+
+function hideAllWebview() {
+  Array.from(webviewMap.values()).forEach((webview) => {
+    hideWebView(webview);
   });
 }

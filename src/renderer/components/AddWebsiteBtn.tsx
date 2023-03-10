@@ -1,26 +1,20 @@
-import { Button, Modal } from '@arco-design/web-react';
-import React, { useState } from 'react';
-import { generateFakeNode, useTreeStore } from '../store/tree';
+import { Button } from '@arco-design/web-react';
+import React from 'react';
+import { generateDefaultNode, useTreeStore } from '../store/tree';
 
 export const AddWebsiteBtn: React.FC = React.memo(() => {
   const { addTreeNode } = useTreeStore();
-  const [visible, setVisible] = useState(false);
 
   return (
     <>
       <Button
         long={true}
         onClick={() => {
-          // setVisible(true);
-          addTreeNode(generateFakeNode());
+          addTreeNode(generateDefaultNode());
         }}
       >
         Add Website
       </Button>
-
-      <Modal visible={visible} onCancel={() => setVisible(false)}>
-        <div>Fooo</div>
-      </Modal>
     </>
   );
 });
