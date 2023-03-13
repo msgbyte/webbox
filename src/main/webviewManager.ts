@@ -85,11 +85,18 @@ export function initWebviewManager(win: BrowserWindow) {
 
     console.log('[update-webview-rect] info:', info);
 
-    const webview = webviewMap.get(info.key);
-    if (webview) {
+    // Change All View to avoid under view display on resize.
+    webviewMap.forEach((webview) => {
       webview.hidden = false;
       webview.view.setBounds(fixRect(info.rect, win.isFullScreen()));
-    }
+    });
+
+    // Change Single View
+    // const webview = webviewMap.get(info.key);
+    // if (webview) {
+    //   webview.hidden = false;
+    //   webview.view.setBounds(fixRect(info.rect, win.isFullScreen()));
+    // }
   });
 
   ipcMain.on('hide-all-webview', (e) => {
