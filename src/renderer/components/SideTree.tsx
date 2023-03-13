@@ -14,16 +14,31 @@ import { stopPropagation } from '../utils/dom';
 const StyledTree = styled(Tree)`
   margin-top: 0.5rem;
 
-  .arco-tree-node-title:hover .arco-tree-node-drag-icon {
-    opacity: 0;
-  }
+  .arco-tree-node {
+    .arco-tree-node-title:hover .arco-tree-node-drag-icon {
+      opacity: 0;
+    }
 
-  .arco-tree-node-title {
-    padding: 0;
-    padding-right: 4px;
+    .arco-tree-node-title {
+      padding: 0;
+      padding-right: 4px;
 
-    & .arco-tree-node-title-text > div {
-      padding: 5px 0 5px 4px;
+      & .arco-tree-node-title-text > div {
+        padding: 5px 0 5px 4px;
+      }
+    }
+
+    .add-icon {
+      position: absolute;
+      right: 8px;
+      font-size: 12px;
+      top: 10px;
+      color: rgb(100, 100, 100);
+      opacity: 0;
+    }
+
+    &:hover .add-icon {
+      opacity: 1;
     }
   }
 ` as unknown as typeof Tree;
@@ -105,13 +120,7 @@ export const SideTree: React.FC = React.memo(() => {
         renderExtra={(node) => {
           return (
             <IconPlus
-              style={{
-                position: 'absolute',
-                right: 8,
-                fontSize: 12,
-                top: 10,
-                color: '#3370ff',
-              }}
+              className="add-icon"
               onClick={() => {
                 if (!node.dataRef) {
                   return;
