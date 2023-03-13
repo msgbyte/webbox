@@ -4,14 +4,17 @@ import {
   shell,
   BrowserWindow,
   MenuItemConstructorOptions,
+  BrowserView,
+  clipboard,
 } from 'electron';
+import contextMenu from 'electron-context-menu';
 
 interface DarwinMenuItemConstructorOptions extends MenuItemConstructorOptions {
   selector?: string;
   submenu?: DarwinMenuItemConstructorOptions[] | Menu;
 }
 
-export default class MenuBuilder {
+export class MenuBuilder {
   mainWindow: BrowserWindow;
 
   constructor(mainWindow: BrowserWindow) {
@@ -287,4 +290,58 @@ export default class MenuBuilder {
 
     return templateDefault;
   }
+}
+
+/**
+ * Build Context Menu
+ */
+export function buildContextMenu(window: BrowserWindow | BrowserView) {
+  // context menu in browser view
+  contextMenu({
+    window,
+    showLearnSpelling: false,
+    showLookUpSelection: false,
+    showSearchWithGoogle: false,
+    showInspectElement: true,
+    prepend: (
+      defaultActions: contextMenu.Actions,
+      parameters: Electron.ContextMenuParams,
+      browserWindow:
+        | BrowserWindow
+        | Electron.WebContents
+        | BrowserView
+        | Electron.WebviewTag
+    ) => {
+      return [
+        {
+          label: 'Reload',
+          visible:
+            browserWindow instanceof BrowserWindow ||
+            browserWindow instanceof BrowserView,
+          click: () => {
+            if (
+              browserWindow instanceof BrowserWindow ||
+              browserWindow instanceof BrowserView
+            ) {
+              browserWindow.webContents.reload();
+            }
+          },
+        },
+        {
+          label: 'Copy Current Page Url',
+          visible:
+            browserWindow instanceof BrowserWindow ||
+            browserWindow instanceof BrowserView,
+          click: () => {
+            if (
+              browserWindow instanceof BrowserWindow ||
+              browserWindow instanceof BrowserView
+            ) {
+              clipboard.writeText(browserWindow.webContents.getURL());
+            }
+          },
+        },
+      ];
+    },
+  });
 }

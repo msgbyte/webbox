@@ -1,5 +1,6 @@
 import { BrowserView, BrowserWindow, ipcMain, Rectangle } from 'electron';
 import os from 'os';
+import { buildContextMenu } from './menu';
 
 interface WebviewInfo {
   view: BrowserView;
@@ -55,6 +56,7 @@ export function initWebviewManager(win: BrowserWindow) {
         nodeIntegration: false,
       },
     });
+    buildContextMenu(view);
     win.addBrowserView(view);
     view.setBounds(fixRect(info.rect, win.isFullScreen()));
     view.webContents.loadURL(url);
