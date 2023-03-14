@@ -14,12 +14,13 @@ const webviewMap = new Map<string, WebviewInfo>();
  * fix rect into correct size
  */
 function fixRect(rect: Rectangle, isFullScreen: boolean): Rectangle {
+  const xOffset = 1;
   const yOffset = !isFullScreen && os.platform() === 'darwin' ? 28 : 0; // add y axis offset in mac os if is not fullScreen
 
   return {
-    x: Math.round(rect.x) + 1,
+    x: Math.round(rect.x) + xOffset,
     y: Math.round(rect.y) + yOffset,
-    width: Math.round(rect.width) - 1,
+    width: Math.round(rect.width) - xOffset,
     height: Math.round(rect.height),
   };
 }
