@@ -59,12 +59,13 @@ export const SideTree: React.FC = React.memo(() => {
   const {
     treeData,
     selectedNode,
+    expandedKeys,
+    setExpandedKeys,
     moveTreeNode,
     setSelectedNode,
     addTreeNodeChildren,
     deleteTreeNode,
   } = useTreeStore();
-  const [expandedKeys, setExpandedKeys] = useState<string[]>([]);
 
   return (
     <div>

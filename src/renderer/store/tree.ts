@@ -18,8 +18,10 @@ export type WebsiteTreeNode = {
 interface TreeStoreState {
   selectedNode: WebsiteTreeNode | null;
   treeData: WebsiteTreeNode[];
+  expandedKeys: string[];
   setSelectedNode: (selectedNode: WebsiteTreeNode | null) => void;
   setTreeData: (treeData: WebsiteTreeNode[]) => void;
+  setExpandedKeys: (expandedKeys: string[]) => void;
   addTreeNode: (treeNode: WebsiteTreeNode) => void;
   addTreeNodeChildren: (parentKey: string, treeNode: WebsiteTreeNode) => void;
   moveTreeNode: (
@@ -63,6 +65,7 @@ export const useTreeStore = create<TreeStoreState>()(
     immer((set) => ({
       treeData: defaultTreeData,
       selectedNode: null,
+      expandedKeys: [],
       setSelectedNode: (selectedNode: WebsiteTreeNode | null) => {
         set({
           selectedNode,
@@ -71,6 +74,11 @@ export const useTreeStore = create<TreeStoreState>()(
       setTreeData: (treeData: WebsiteTreeNode[]) => {
         set({
           treeData,
+        });
+      },
+      setExpandedKeys: (expandedKeys: string[]) => {
+        set({
+          expandedKeys,
         });
       },
       addTreeNode: (treeNode: WebsiteTreeNode) => {
@@ -181,7 +189,10 @@ export const useTreeStore = create<TreeStoreState>()(
     })),
     {
       name: 'webbox-tree',
-      partialize: (state) => ({ treeData: state.treeData }),
+      partialize: (state) => ({
+        treeData: state.treeData,
+        expandedKeys: state.expandedKeys,
+      }),
     }
   )
 );
