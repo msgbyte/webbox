@@ -58,9 +58,10 @@ export function initWebviewManager(win: BrowserWindow) {
       },
     });
     buildContextMenu(view);
-    win.addBrowserView(view);
+    view.setBackgroundColor('#fff');
     view.setBounds(fixRect(info.rect, win.isFullScreen()));
     view.webContents.loadURL(url);
+    win.addBrowserView(view);
     webviewMap.set(key, { view, url, hidden: false });
   });
 
