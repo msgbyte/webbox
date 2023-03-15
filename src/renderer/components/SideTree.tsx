@@ -1,6 +1,6 @@
 import { Menu, Tree, Trigger } from '@arco-design/web-react';
 import { IconDown, IconPlus } from '@arco-design/web-react/icon';
-import React, { useState } from 'react';
+import React from 'react';
 import {
   generateDefaultNode,
   WebsiteTreeNode,
@@ -10,6 +10,17 @@ import { AddWebsiteBtn } from './AddWebsiteBtn';
 import styled from 'styled-components';
 import { ClearWebsiteBtn } from './ClearWebsiteBtn';
 import { stopPropagation } from '../utils/dom';
+
+const Root = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  > .tree {
+    flex: 1;
+    overflow: auto;
+  }
+`;
 
 const StyledTree = styled(Tree)`
   margin-top: 0.5rem;
@@ -68,81 +79,83 @@ export const SideTree: React.FC = React.memo(() => {
   } = useTreeStore();
 
   return (
-    <div>
+    <Root>
       <Row>
         <AddWebsiteBtn />
         <ClearWebsiteBtn />
       </Row>
 
-      <StyledTree
-        draggable={true}
-        blockNode={true}
-        selectedKeys={selectedNode ? [selectedNode.key] : []}
-        expandedKeys={expandedKeys}
-        onExpand={(expandedKeys) => {
-          setExpandedKeys(expandedKeys);
-        }}
-        treeData={treeData}
-        icons={{
-          switcherIcon: <IconDown />,
-        }}
-        renderTitle={(props) => (
-          <Trigger
-            position="br"
-            popupAlign={{
-              right: [20, 20],
-            }}
-            popup={() => (
-              <StyledMenu>
-                <Menu.Item
-                  key="del"
-                  onClick={(e) => {
-                    stopPropagation(e);
-                    if (props.dataRef && props.dataRef.key) {
-                      deleteTreeNode(props.dataRef.key);
-                    }
-                  }}
-                >
-                  Delete
-                </Menu.Item>
-              </StyledMenu>
-            )}
-            trigger={'contextMenu'}
-          >
-            <div>{props.title}</div>
-          </Trigger>
-        )}
-        onSelect={(_, extra) => {
-          const nodeData = extra.node.props.dataRef;
-          if (nodeData) {
-            setSelectedNode(nodeData as WebsiteTreeNode);
-          }
-        }}
-        renderExtra={(node) => {
-          return (
-            <IconPlus
-              className="add-icon"
-              onClick={() => {
-                if (!node.dataRef) {
-                  return;
-                }
-
-                const key = node.dataRef.key;
-                if (!key) {
-                  return;
-                }
-
-                setExpandedKeys([...expandedKeys, key]);
-                addTreeNodeChildren(key, generateDefaultNode());
+      <div className="tree">
+        <StyledTree
+          draggable={true}
+          blockNode={true}
+          selectedKeys={selectedNode ? [selectedNode.key] : []}
+          expandedKeys={expandedKeys}
+          onExpand={(expandedKeys) => {
+            setExpandedKeys(expandedKeys);
+          }}
+          treeData={treeData}
+          icons={{
+            switcherIcon: <IconDown />,
+          }}
+          renderTitle={(props) => (
+            <Trigger
+              position="br"
+              popupAlign={{
+                right: [20, 20],
               }}
-            />
-          );
-        }}
-        onDrop={({ dragNode, dropNode, dropPosition }) => {
-          moveTreeNode(dragNode, dropNode, dropPosition);
-        }}
-      />
-    </div>
+              popup={() => (
+                <StyledMenu>
+                  <Menu.Item
+                    key="del"
+                    onClick={(e) => {
+                      stopPropagation(e);
+                      if (props.dataRef && props.dataRef.key) {
+                        deleteTreeNode(props.dataRef.key);
+                      }
+                    }}
+                  >
+                    Delete
+                  </Menu.Item>
+                </StyledMenu>
+              )}
+              trigger={'contextMenu'}
+            >
+              <div>{props.title}</div>
+            </Trigger>
+          )}
+          onSelect={(_, extra) => {
+            const nodeData = extra.node.props.dataRef;
+            if (nodeData) {
+              setSelectedNode(nodeData as WebsiteTreeNode);
+            }
+          }}
+          renderExtra={(node) => {
+            return (
+              <IconPlus
+                className="add-icon"
+                onClick={() => {
+                  if (!node.dataRef) {
+                    return;
+                  }
+
+                  const key = node.dataRef.key;
+                  if (!key) {
+                    return;
+                  }
+
+                  setExpandedKeys([...expandedKeys, key]);
+                  addTreeNodeChildren(key, generateDefaultNode());
+                }}
+              />
+            );
+          }}
+          onDrop={({ dragNode, dropNode, dropPosition }) => {
+            moveTreeNode(dragNode, dropNode, dropPosition);
+          }}
+        />
+      </div>
+    </Root>
   );
 });
 SideTree.displayName = 'SideTree';
