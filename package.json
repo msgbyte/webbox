@@ -41,6 +41,7 @@
     "start:preload": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.preload.dev.ts",
     "start:renderer": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack serve --config ./.erb/configs/webpack.config.renderer.dev.ts",
     "create:icons": "electron-icon-builder --input=./assets/icon.png --output=./assets -f",
+    "release": "release-it",
     "test": "jest"
   },
   "browserslist": [],
@@ -113,6 +114,7 @@
     "@electron/notarize": "^1.2.3",
     "@electron/rebuild": "^3.2.10",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.10",
+    "@release-it/conventional-changelog": "^5.1.1",
     "@svgr/webpack": "^6.5.1",
     "@teamsupercell/typings-for-css-modules-loader": "^2.5.2",
     "@testing-library/jest-dom": "^5.16.5",
@@ -160,6 +162,7 @@
     "prettier": "^2.8.3",
     "react-refresh": "^0.14.0",
     "react-test-renderer": "^18.2.0",
+    "release-it": "^15.8.0",
     "rimraf": "^4.1.2",
     "sass": "^1.58.0",
     "sass-loader": "^13.2.0",

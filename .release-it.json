@@ -1,0 +1,20 @@
+{
+  "github": {
+    "release": true
+  },
+  "git": {
+    "commitMessage": "chore: release v${version}"
+  },
+  "npm": {
+    "publish": false
+  },
+  "hooks": {
+    "after:bump": "echo Version Upgrade Success. checkout more in CHANGELOG"
+  },
+  "plugins": {
+    "@release-it/conventional-changelog": {
+      "preset": "angular",
+      "infile": "CHANGELOG.md"
+    }
+  }
+}

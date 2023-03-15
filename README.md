@@ -31,4 +31,4 @@ It's time to return to a refreshing state!
 
 No need to compile, download now!
 
-In [here](https://github.com/msgbyte/webbox/releases) can directly obtain the pre -compiled executable file.
+In [here](https://github.com/msgbyte/webbox/releases) can directly obtain the pre-compiled executable file.
