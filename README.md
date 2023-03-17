@@ -4,6 +4,8 @@
 
 [简体中文](./README.zh.md)
 
+`Bookmarks` + `Tabs` + `Tree Organize`
+
 ## Motivation
 
 As web applications become more and more developed, there are various tabs in my work. Resident and temporary tabs are mixed together, and web pages with different needs are intertwined.
