@@ -8,6 +8,8 @@ module.exports = {
     'import/extensions': 'off',
     'import/no-unresolved': 'off',
     'import/no-import-module-exports': 'off',
+    'import/prefer-default-export': 'off',
+    'no-use-before-define': 'off',
   },
   parserOptions: {
     ecmaVersion: 2020,

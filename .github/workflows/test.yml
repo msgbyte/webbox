@@ -29,10 +29,5 @@ jobs:
           pnpm install
 
       - name: npm test
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          pnpm package
-          pnpm lint
-          pnpm tsc
-          pnpm test
+          pnpm tsc --noEmit

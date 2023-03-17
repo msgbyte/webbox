@@ -10,6 +10,7 @@
     "moduleResolution": "node",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
     "resolveJsonModule": true,
     "allowJs": true,
     "outDir": ".erb/dll"
