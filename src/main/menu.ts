@@ -303,15 +303,7 @@ export function buildContextMenu(window: BrowserWindow | BrowserView) {
     showLookUpSelection: false,
     showSearchWithGoogle: false,
     showInspectElement: true,
-    prepend: (
-      defaultActions: contextMenu.Actions,
-      parameters: Electron.ContextMenuParams,
-      browserWindow:
-        | BrowserWindow
-        | Electron.WebContents
-        | BrowserView
-        | Electron.WebviewTag
-    ) => {
+    prepend: (defaultActions, parameters, browserWindow) => {
       return [
         {
           label: 'Reload',

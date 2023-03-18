@@ -1,5 +1,6 @@
 import { BrowserView, BrowserWindow, ipcMain, Rectangle } from 'electron';
 import os from 'os';
+import log from 'electron-log';
 import { buildContextMenu } from './menu';
 
 interface WebviewInfo {
@@ -28,14 +29,13 @@ function fixRect(rect: Rectangle, isFullScreen: boolean): Rectangle {
 export function initWebviewManager(win: BrowserWindow) {
   ipcMain.on('mount-webview', (e, info) => {
     if (!win) {
-      console.log('[mount-webview]', 'cannot get mainWindow');
+      log.info('[mount-webview]', 'cannot get mainWindow');
       return;
     }
 
-    console.log('[mount-webview] info:', info);
+    log.info('[mount-webview] info:', info);
 
-    const key = info.key;
-    const url = info.url;
+    const { key, url } = info;
     if (!url) {
       return;
     }
@@ -67,13 +67,13 @@ export function initWebviewManager(win: BrowserWindow) {
 
   ipcMain.on('unmount-webview', (e, info) => {
     if (!win) {
-      console.log('[unmount-webview]', 'cannot get mainWindow');
+      log.info('[unmount-webview]', 'cannot get mainWindow');
       return;
     }
 
-    console.log('[unmount-webview] info:', info);
+    log.info('[unmount-webview] info:', info);
 
-    const key = info.key;
+    const { key } = info;
     const webview = webviewMap.get(key);
     if (webview) {
       win.removeBrowserView(webview.view);
@@ -83,11 +83,11 @@ export function initWebviewManager(win: BrowserWindow) {
 
   ipcMain.on('update-webview-rect', (e, info) => {
     if (!win) {
-      console.log('[update-webview-rect]', 'cannot get mainWindow');
+      log.info('[update-webview-rect]', 'cannot get mainWindow');
       return;
     }
 
-    console.log('[update-webview-rect] info:', info);
+    log.info('[update-webview-rect] info:', info);
 
     // Change All View to avoid under view display on resize.
     webviewMap.forEach((webview) => {
@@ -103,19 +103,19 @@ export function initWebviewManager(win: BrowserWindow) {
     // }
   });
 
-  ipcMain.on('hide-all-webview', (e) => {
-    console.log('[hide-all-webview]');
+  ipcMain.on('hide-all-webview', () => {
+    log.info('[hide-all-webview]');
 
     hideAllWebview();
   });
 
-  ipcMain.on('clear-all-webview', (e) => {
+  ipcMain.on('clear-all-webview', () => {
     if (!win) {
-      console.log('[clear-all-webview]', 'cannot get mainWindow');
+      log.info('[clear-all-webview]', 'cannot get mainWindow');
       return;
     }
 
-    console.log('[clear-all-webview]');
+    log.info('[clear-all-webview]');
 
     win.getBrowserViews().forEach((view) => {
       win.removeBrowserView(view);
