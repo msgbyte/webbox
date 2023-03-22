@@ -2,6 +2,7 @@ import { BrowserView, BrowserWindow, ipcMain, Rectangle } from 'electron';
 import os from 'os';
 import log from 'electron-log';
 import { buildContextMenu } from './menu';
+import { createSubWindow, subWindowOpenHandler } from './subWindow';
 
 interface WebviewInfo {
   view: BrowserView;
@@ -61,6 +62,7 @@ export function initWebviewManager(win: BrowserWindow) {
     view.setBackgroundColor('#fff');
     view.setBounds(fixRect(info.rect, win.isFullScreen()));
     view.webContents.loadURL(url);
+    view.webContents.setWindowOpenHandler(subWindowOpenHandler);
     win.addBrowserView(view);
     webviewMap.set(key, { view, url, hidden: false });
   });

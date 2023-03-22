@@ -8,6 +8,7 @@ import {
   clipboard,
 } from 'electron';
 import contextMenu from 'electron-context-menu';
+import _compact from 'lodash/compact';
 
 interface DarwinMenuItemConstructorOptions extends MenuItemConstructorOptions {
   selector?: string;
@@ -17,8 +18,11 @@ interface DarwinMenuItemConstructorOptions extends MenuItemConstructorOptions {
 export class MenuBuilder {
   mainWindow: BrowserWindow;
 
-  constructor(mainWindow: BrowserWindow) {
+  allowClose: boolean;
+
+  constructor(mainWindow: BrowserWindow, allowClose = false) {
     this.mainWindow = mainWindow;
+    this.allowClose = allowClose;
   }
 
   buildMenu(): Menu {
@@ -143,16 +147,22 @@ export class MenuBuilder {
     };
     const subMenuWindow: DarwinMenuItemConstructorOptions = {
       label: 'Window',
-      submenu: [
+      submenu: _compact([
         {
           label: 'Minimize',
           accelerator: 'Command+M',
           selector: 'performMiniaturize:',
         },
-        { label: 'Close', accelerator: 'Command+W', selector: 'performClose:' },
+        this.allowClose
+          ? {
+              label: 'Close',
+              accelerator: 'Command+W',
+              selector: 'performClose:',
+            }
+          : null,
         { type: 'separator' },
         { label: 'Bring All to Front', selector: 'arrangeInFront:' },
-      ],
+      ]),
     };
     const subMenuHelp: MenuItemConstructorOptions = {
       label: 'Help',
@@ -199,19 +209,21 @@ export class MenuBuilder {
     const templateDefault = [
       {
         label: '&File',
-        submenu: [
+        submenu: _compact([
           {
             label: '&Open',
             accelerator: 'Ctrl+O',
           },
-          {
-            label: '&Close',
-            accelerator: 'Ctrl+W',
-            click: () => {
-              this.mainWindow.close();
-            },
-          },
-        ],
+          this.allowClose
+            ? {
+                label: '&Close',
+                accelerator: 'Ctrl+W',
+                click: () => {
+                  this.mainWindow.close();
+                },
+              }
+            : null,
+        ]),
       },
       {
         label: '&View',
