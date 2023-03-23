@@ -2,7 +2,7 @@ import { BrowserView, BrowserWindow, ipcMain, Rectangle } from 'electron';
 import os from 'os';
 import log from 'electron-log';
 import { buildContextMenu } from './menu';
-import { createSubWindow, subWindowOpenHandler } from './subWindow';
+import { subWindowOpenHandler } from './subWindow';
 
 interface WebviewInfo {
   view: BrowserView;
